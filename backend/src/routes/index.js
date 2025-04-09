@@ -17,12 +17,12 @@ router.get("/", (req, res) => {
 });
 
 router.route("/signup").post(signup);
-router.post("/login", login);
-router.post("/createProj", createProj);
-router.post("/saveProject", saveProject);
-router.post("/getProjects", getProjects);
-router.post("/getProject", getProject);
-router.post("/deleteProject", deleteProject);
-router.post("/editProject", editProject);
+router.route("/login").post(login);
+router.route("/createProj").post(createProj);
+router.route("/saveProject").post(saveProject);
+router.route("/getProjects").post(getProjects);
+router.route("/getProject").post(getProject);
+router.route("/deleteProject").post(deleteProject);
+router.route("/editProject").post(editProject);
 
 export default router;
