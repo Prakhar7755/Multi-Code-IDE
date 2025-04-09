@@ -1,28 +1,22 @@
 import userModel from "../models/userModel.js";
 import projectModel from "../models/projectModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const secret = process.env.JWT_SECRET;
+const jwtSecret = process.env.JWT_SECRET;
 
-function getCodeTemplate(language) {
-  if (language.toLowerCase() === "python") {
-    return 'print("Hello World")';
-  } else if (language.toLowerCase() === "java") {
-    return 'public class Main { public static void main(String[] args) { System.out.println("Hello World"); } }';
-  } else if (language.toLowerCase() === "javascript") {
-    return 'console.log("Hello World");';
-  } else if (language.toLowerCase() === "cpp") {
-    return '#include <iostream>\n\nint main() {\n    std::cout << "Hello World" << std::endl;\n    return 0;\n}';
-  } else if (language.toLowerCase() === "c") {
-    return '#include <stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    return 0;\n}';
-  } else if (language.toLowerCase() === "go") {
-    return 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello World")\n}';
-  } else if (language.toLowerCase() === "bash") {
-    return 'echo "Hello World"';
-  } else {
-    return "Language not supported";
-  }
-}
+const getCodeTemplate = (language) => {
+  const codeTemplates = {
+    python: 'print("Hello World")',
+    java: 'public class Main { public static void main(String[] args) { System.out.println("Hello World"); } }',
+    javascript: 'console.log("Hello World");',
+    cpp: '#include <iostream>\n\nint main() {\n    std::cout << "Hello World" << std::endl;\n    return 0;\n}',
+    c: '#include <stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    return 0;\n}',
+    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello World")\n}',
+    bash: 'echo "Hello World"',
+  };
+  return codeTemplates[language.toLowerCase()] || "Language not supported";
+};
 
 const signup = async (req, res) => {
   try {
@@ -74,7 +68,7 @@ const login = async (req, res) => {
 
     bcrypt.compare(pwd, user.password, function (err, result) {
       if (result) {
-        let token = jwt.sign({ userId: user._id }, secret);
+        let token = jwt.sign({ userId: user._id }, jwtSecret);
 
         return res.status(200).json({
           success: true,
@@ -101,7 +95,7 @@ const login = async (req, res) => {
 const createProj = async (req, res) => {
   try {
     const { name, projLanguage, token, version } = req.body;
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
     if (!user) {
       return res.status(401).json({
@@ -135,7 +129,7 @@ const saveProject = async (req, res) => {
   try {
     const { projectId, code, token } = req.body;
 
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
     if (!user) {
       return res.status(401).json({
@@ -177,7 +171,7 @@ const getProjects = async (req, res) => {
   try {
     const { token } = req.body;
 
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
 
     if (!user) {
@@ -214,7 +208,7 @@ const getProject = async (req, res) => {
   try {
     const { projectId, token } = req.body;
 
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
     if (!user) {
       return res.status(401).json({
@@ -250,7 +244,7 @@ const getProject = async (req, res) => {
 const deleteProject = async (req, res) => {
   try {
     const { projectId, token } = req.body;
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
 
     if (!user) {
@@ -283,7 +277,7 @@ const deleteProject = async (req, res) => {
 const editProject = async (req, res) => {
   try {
     const { token, projectId, name } = req.body;
-    const decodedTokenInformation = jwt.verify(token, secret);
+    const decodedTokenInformation = jwt.verify(token, jwtSecret);
     const user = await userModel.findById(decodedTokenInformation.userId);
     if (!user) {
       return res.status(401).json({
