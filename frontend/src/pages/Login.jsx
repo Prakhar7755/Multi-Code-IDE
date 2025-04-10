@@ -54,6 +54,7 @@ const Login = () => {
               type="email"
               value={email}
               placeholder="Email"
+               className="placeholder-white text-white"
               required
             />
           </div>
@@ -65,6 +66,7 @@ const Login = () => {
               type="text"
               value={pwd}
               placeholder="Password"
+               className="placeholder-white text-white"
               required
             />
           </div>

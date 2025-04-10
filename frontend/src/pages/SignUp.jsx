@@ -54,6 +54,7 @@ const SignUp = () => {
               type="text"
               value={fullName}
               placeholder="Full Name"
+              className="placeholder-white text-white"
               required
             />
           </div>
@@ -64,6 +65,7 @@ const SignUp = () => {
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               value={email}
+              className="placeholder-white text-white"
               placeholder="Email"
               required
             />
@@ -75,6 +77,7 @@ const SignUp = () => {
               onChange={(e) => setPwd(e.target.value)}
               type="text"
               value={pwd}
+              className="placeholder-white text-white"
               placeholder="Password"
               required
             />

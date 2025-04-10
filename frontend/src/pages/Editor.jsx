@@ -1,3 +1,12 @@
+import React from 'react'
+
+const Editor = () => {
+  return (
+    <div>Editor</div>
+  )
+}
+
+export default Editor
 /* import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
